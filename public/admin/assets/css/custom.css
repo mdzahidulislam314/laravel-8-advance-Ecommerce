@@ -1,0 +1,44 @@
+.content.content-full {
+    padding: 10px 0 10px 0px;
+}
+.table thead th {
+    text-transform: capitalize;
+}
+
+a.fileinput-upload.fileinput-upload-button {
+    display: none !important;
+}
+.fileinput-remove.fileinput-remove-button {
+    background: orange;
+}
+.file-preview .fileinput-remove {
+    top: 7px;
+    right: 5px;
+    line-height: 10px;
+    color: red;
+}
+.krajee-default .file-footer-caption {
+    margin-bottom: 10px !important;
+}
+.krajee-default.file-preview-frame .kv-file-content {
+    width: 170px !important;
+    height: 100px !important;
+}
+.imageThumb {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #ddd;
+    padding: 3px;
+    border-radius: 3px;
+}
+.remove {
+    cursor: pointer;
+    color: #fff;
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    background: #333;
+}
+span.pip {
+    margin-right: 10px;
+}
