@@ -35,30 +35,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($products as $item)
-                                <tr>
-                                    <td>
-                                        <img class="img-avatar img-avatar48"
-                                             src="{{isset($item->thumb_image) ? url('uploads/admin/products/' . $item->thumb_image) : url('uploads/no-img.jpg')}}" alt="">
-                                    </td>
-                                    <td>
-                                        {{$item->name_en}}
-                                    </td>
-                                    <td>
-                                        {{$item->name_bn}}
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-alt-primary js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Edit">
-                                                <i class="fa fa-fw fa-pencil-alt"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-alt-primary js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Delete">
-                                                <i class="fa fa-fw fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                @foreach ($products as $item)
+                                    <tr>
+                                        <td>
+                                            <img class="img-avatar img-avatar48"
+                                                src="{{ isset($item->thumb_image) ? url('uploads/admin/products/' . $item->thumb_image) : url('uploads/no-img.jpg') }}"
+                                                alt="">
+                                        </td>
+                                        <td>
+                                            {{ $item->name_en }}
+                                        </td>
+                                        <td>
+                                            {{ $item->name_bn }}
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                                <a href="{{ route('products.edit', $item->id) }}"
+                                                    class="btn btn-sm btn-alt-primary js-tooltip-enabled"
+                                                    data-toggle="tooltip" title="Edit" data-original-title="Edit">
+                                                    <i class="fa fa-fw fa-pencil-alt"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-sm btn-alt-primary js-tooltip-enabled"
+                                                    data-toggle="tooltip" title="Delete" data-original-title="Delete">
+                                                    <i class="fa fa-fw fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

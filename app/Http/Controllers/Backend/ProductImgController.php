@@ -71,6 +71,10 @@ class ProductImgController extends Controller
     public function deleteAltImgById(Request $req)
     {
         $pro_img = ProductImage::find($req->id);
+        $path = 'uploads/admin/products/alt-img/' . $pro_img->image;
+        if (file_exists($path)) {
+            unlink($path);
+        }
         $pro_img->delete();
     }
 }

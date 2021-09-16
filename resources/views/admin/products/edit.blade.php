@@ -17,7 +17,7 @@
                             <li class="breadcrumb-item text-dark"><a href="{{ route('products.index') }}">All Products</a>
                             </li>
                             <li class="breadcrumb-item" aria-current="page">
-                                <a class="link-fx" href="">Add New</a>
+                                <a class="link-fx" href="">Edit Product</a>
                             </li>
                         </ol>
                     </nav>
@@ -28,8 +28,9 @@
             @include('admin.inc.flash-message')
             <div class="block block-rounded">
                 <div class="block-content block-content-full">
-                    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('products.update',$product->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
+                        @method('PUT')
                         <h2 class="content-heading border-bottom mb-4 pb-2">Regular</h2>
                         <div class="row items-push">
                             <div class="col-lg-4">
@@ -37,8 +38,10 @@
                                     <label for="category_id">Category <span class="text-danger">*</span></label>
                                     <select class="js-select form-control" name="category_id" style="width: 100%;">
                                         <option selected value="">Select</option>
-                                        @foreach ($categories as $row)
-                                            <option value="{{ $row->id }}">{{ $row->name_en }}</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}"
+                                                {{ $category->id == $product->category_id ? 'selected' : '' }}>
+                                                {{ $category->name_en }}</option>
                                         @endforeach
                                     </select>
                                     @error('category_id')
@@ -48,7 +51,7 @@
                                 <div class="form-group">
                                     <label for="name_en">Product Name En <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="name_en" name="name_en"
-                                        value="{{ old('name_en') }}">
+                                        value="{{ $product->name_en }}">
                                     @error('name_en')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -56,7 +59,7 @@
                                 <div class="form-group">
                                     <label for="selling_price">Selling Price <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="selling_price" name="selling_price"
-                                        value="{{ old('selling_price') }}">
+                                        value="{{ $product->selling_price }}">
                                     @error('selling_price')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -65,59 +68,67 @@
                                     <label for="val-confirm-password">Colors En <span
                                             class="text-danger">*</span></label>
                                     <input type="text" name="color_en" class="form-control" data-role="tagsinput"
-                                        value="{{ old('color_en') }}">
+                                        value="{{ $product->color_en }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="val-confirm-password">Sizes En <span class="text-danger">*</span></label>
                                     <input type="text" name="size_en" class="form-control" data-role="tagsinput"
-                                        value="{{ old('size_en') }}">
+                                        value="{{ $product->size_en }}">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="subcategory_id">Sub Category <span class="text-danger">*</span></label>
                                     <select class="form-control js-select" name="subcategory_id" style="width: 100%;">
-
+                                        <option value="" selected="" disabled="">Select</option>
+                                        @foreach ($subcategory as $sub)
+                                            <option value="{{ $sub->id }}"
+                                                {{ $sub->id == $product->subcategory_id ? 'selected' : '' }}>
+                                                {{ $sub->name_en }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="name_bn">Product Name Bn <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="name_bn" name="name_bn"
-                                        value="{{ old('name_bn') }}">
+                                        value="{{ $product->name_bn }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="discount_price">Discount price <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="discount_price" name="discount_price"
-                                        value="{{ old('discount_price') }}">
+                                        value="{{ $product->discount_price }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="val-confirm-password">Tags En <span class="text-danger">*</span></label>
                                     <input type="text" name="tag_en" class="form-control" data-role="tagsinput"
-                                        value="{{ old('tag_en') }}">
+                                        value="{{ $product->tag_en }}">
                                 </div>
                                 <div class="form-group">
                                     <label class="d-block">Visibility</label>
                                     <div class="custom-control custom-switch custom-control-inline mb-2">
-                                        <input type="checkbox" class="custom-control-input" id="hot_deal" name="hot_deal">
+                                        <input type="checkbox" class="custom-control-input" id="hot_deal" name="hot_deal"
+                                            {{ $product->hot_deal == 1 ? 'checked': '' }}>
                                         <label class="custom-control-label" for="hot_deal">Hot Deal</label>
                                     </div>
                                     <div class="custom-control custom-switch custom-control-inline mb-2">
-                                        <input type="checkbox" class="custom-control-input" id="featured" name="featured">
+                                        <input type="checkbox" class="custom-control-input" id="featured" name="featured"
+                                            {{ $product->featured == 1 ? 'checked': '' }}>
                                         <label class="custom-control-label" for="featured">Featured</label>
                                     </div>
                                     <div class="custom-control custom-switch custom-control-inline mb-2">
                                         <input type="checkbox" class="custom-control-input" id="spacial_offer"
-                                            name="spacial_offer">
+                                            name="spacial_offer" {{ $product->spacial_offer == 1 ? 'checked': '' }}>
                                         <label class="custom-control-label" for="spacial_offer">Spacial Offer</label>
                                     </div>
                                     <div class="custom-control custom-switch custom-control-inline mb-2">
                                         <input type="checkbox" class="custom-control-input" id="spacial_deals"
-                                            name="spacial_deals">
+                                            name="spacial_deals" {{ $product->spacial_deals == 1 ? 'checked': '' }}>
                                         <label class="custom-control-label" for="spacial_deals">Spacial Deals</label>
                                     </div>
                                     <div class="custom-control custom-switch custom-control-inline mb-2">
-                                        <input type="checkbox" class="custom-control-input" id="is-active" name="is_active">
-                                        <label class="custom-control-label" for="is-active">Active</label>
+                                        <input type="checkbox" class="custom-control-input" id="is-active" name="is_active"
+                                            {{ $product->is_active == 1 ? 'checked': '' }}>
+                                        <label class="custom-control-label" for="is_active">Active</label>
                                     </div>
                                 </div>
                             </div>
@@ -125,34 +136,43 @@
                                 <div class="form-group">
                                     <label for="val-email">Inner Category <span class="text-danger">*</span></label>
                                     <select class="js-select form-control" name="inner_category_id" style="width: 100%;">
-
+                                        <option value="" selected="" disabled="">Select</option>
+                                        @if($product->inner_category_id)
+                                            @foreach ($innercategories as $row)
+                                                <option value="{{ $row->id }}"
+                                                    {{ $row->id == $product->inner_category_id ? 'selected' : '' }}>
+                                                    {{ $row->name_en }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="code">Product Code <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="code" name="code"
-                                        value="{{ old('code') }}">
+                                           value="{{ $product->code }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="qty">Qty <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" id="qty" name="qty"
-                                        value="{{ old('qty') }}">
+                                        value="{{ $product->qty }}">
                                     @error('qty')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
                                     <label for="val-confirm-password">Tags Bn <span class="text-danger">*</span></label>
-                                    <input type="text" name="tag_bn" class="form-control" data-role="tagsinput"
-                                        value="{{ old('tag_bn') }}">
+                                    <input type="text" name="tag_bn" class="form-control" data-role="tagsinput" value="{{ $product->tag_bn }}">
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label">Brands</label>
                                     <select class="form-control select2" name="brand_id" id="getBrand">
-                                        <option value='0'></option>
+                                        <option value='' selected disabled>Select</option>
+                                        @foreach ($brands as $brand)
+                                            <option value="{{ $brand->id }}"
+                                                {{ $brand->id == $product->brand_id ? 'selected' : '' }}>
+                                                {{ $brand->name_en }}</option>
+                                        @endforeach
                                     </select>
-                                    <a href="javascript:void(0);" class="btn btn-info btn-sm mt-2 brandCreate"
-                                        id="brandCreate"><i class="ri-add-fill"></i>Add New</a>
                                 </div>
                             </div>
                         </div>
@@ -168,6 +188,11 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+                                <div class="d-flex align-items-center">
+                                    <span class="pip">
+                                        <img class="imageThumb" src="{{url('uploads/admin/products/'. $product->thumb_image)}}">
+                                    </span>
+                                </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
@@ -180,6 +205,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <div class="d-flex align-items-center">
+                                        @foreach($multiImgs as $item)
+                                            <span class="pip">
+                                                <img class="imageThumb" src="{{url('uploads/admin/products/alt-img/'. $item->image)}}">
+                                                <br>
+                                                <span class="remove" onclick="deleteAltImgById(event, {{$item->id}})">Remove</span>
+                                            </span>
+                                        @endforeach
+                                    </div>
                                     <div id="alt_img_show" class="d-flex align-items-center">
 
                                     </div>
@@ -202,28 +236,28 @@
                                 <label for="val-email">Short Desc En <span class="text-danger">*</span></label>
                                 <div class="form-group">
                                     <textarea name="short_desc_en"
-                                        class="ckeditor">{{ old('short_desc_en') }}</textarea>
+                                        class="ckeditor">{{ $product->short_desc_en }}</textarea>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <label for="val-email">Short Desc Bn</label>
                                 <div class="form-group">
                                     <textarea name="short_desc_bn"
-                                        class="ckeditor">{{ old('short_desc_bn') }}</textarea>
+                                        class="ckeditor">{{ $product->short_desc_bn }}</textarea>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <label for="val-email">Long Desc En</label>
                                 <div class="form-group">
                                     <textarea name="long_desc_en"
-                                        class="ckeditor">{{ old('long_desc_en') }}</textarea>
+                                        class="ckeditor">{{ $product->long_desc_en }}</textarea>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <label for="val-email">Long Desc Bn</label>
                                 <div class="form-group">
                                     <textarea id="js-ckeditor2" name="long_desc_bn"
-                                        class="ckeditor">{{ old('long_desc_bn') }}</textarea>
+                                        class="ckeditor">{{ $product->long_desc_bn }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -238,64 +272,6 @@
             </div>
         </div>
     </main>
-
-    <div class="modal fade" id="modal-create" tabindex="-1" role="dialog" aria-labelledby="modal-block-fadein"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="block block-rounded block-themed block-transparent mb-0">
-                    <div class="block-header bg-primary-dark">
-                        <h3 class="block-title" id="head_text">Modal Title</h3>
-                        <div class="block-options">
-                            <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
-                                <i class="fa fa-fw fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <form action="" method="POST" enctype="multipart/form-data" id="form-create">
-                        @csrf
-                        <div class="block-content font-size-sm">
-                            <div class="alert alert-danger print-error-msg" style="display:none">
-                                <ul class="m-0"></ul>
-                            </div>
-                            <div class="row push">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label for="name_en">Name En</label>
-                                        <input type="text" class="form-control" id="name_en" name="name_en" value="" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="name_bn">Name Bn</label>
-                                        <input type="text" class="form-control" id="name_bn" name="name_bn" value="" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Image</label>
-                                        <div class="push">
-                                            <img id="showImg" class="img-avatar" src="" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="file" class="form-control" name="image" id="image" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Active</label>
-                                        <div class="custom-control custom-switch mb-1">
-                                            <input type="checkbox" class="custom-control-input" id="is_active"
-                                                name="is_active" />
-                                            <label class="custom-control-label" for="is_active"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="block-content block-content-full text-right border-top">
-                                <button type="submit" class="btn btn-primary btn-save">Save</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @push('script')
@@ -305,114 +281,6 @@
     <script src="/admin/assets/vendor/bootstrap-file-input/theme.js"></script>
     <script src="/admin/assets/vendor/dropify/js/dropify.js"></script>
     <!-- add brand ajax-->
-    <script>
-        $(function() {
-            // open create modal
-            $(".brandCreate").on("click", function(e) {
-                e.preventDefault();
-                console.log('ok');
-                $(".print-error-msg").css('display', 'none');
-                $("#head_text").html('Add Brand');
-
-                var form = $("#form-create");
-                form.attr("action", route('brands.store'));
-                form.attr("method", "POST");
-
-                $("input[name=name_en]").val("");
-                $("input[name=name_bn]").val("");
-                $("input[name=is_active]").prop('checked', false);
-                $("#showImg").attr('src', '{{ url('uploads/no-img.jpg') }}');
-                $("input[name=image]").val("");
-                $(".img-avatar").hide();
-
-                $("#modal-create").modal();
-            });
-
-            //insert data
-            $("#form-create").on("click", ".btn-save", function(e) {
-                e.preventDefault();
-                $(".print-error-msg").css('display', 'none');
-
-                var form = $("#form-create");
-                var action = form.attr("action");
-                var data = new FormData(form[0]);
-                data.append("_method", form.attr("method"));
-
-                $.ajax({
-                        url: action,
-                        method: "POST",
-                        data: data,
-                        cache: false,
-                        contentType: false,
-                        processData: false
-                    })
-                    .done(function(data) {
-                        if (data.success) {
-                            form.trigger("reset");
-                            One.helpers('notify', {
-                                type: 'success',
-                                icon: 'fa fa-check mr-1',
-                                message: data.message
-                            })
-                            $("#modal-create").modal('hide');
-                        } else {
-                            One.helpers('notify', {
-                                type: 'danger',
-                                icon: 'fa fa-check mr-1',
-                                message: 'Something went wrong!'
-                            })
-                        }
-                    })
-                    .fail(function(xhr) {
-                        // button.html("Save").attr("disabled", false);
-                        if (xhr.status == 422) {
-                            printErrorMsg(xhr.responseJSON.errors);
-                        } else {
-                            One.helpers('notify', {
-                                type: 'danger',
-                                icon: 'fa fa-check mr-1',
-                                message: 'Something went wrong!'
-                            })
-                        }
-                    });
-            });
-
-            function printErrorMsg(msg) {
-                $(".print-error-msg").find("ul").html('');
-                $(".print-error-msg").css('display', 'block');
-                $.each(msg, function(key, value) {
-                    $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
-                });
-            }
-        });
-
-        $(document).ready(function() {
-            // CSRF Token
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            //brand load ajax
-            $("#getBrand").select2({
-                ajax: {
-                    url: "{{ route('get.brands') }}",
-                    type: "post",
-                    dataType: 'json',
-                    delay: 150,
-                    data: function(params) {
-                        return {
-                            _token: CSRF_TOKEN,
-                            search: params.term // search term
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    },
-                    cache: true
-                }
-
-            });
-        });
-    </script>
 
     <script>
         $(document).ready(function() {
